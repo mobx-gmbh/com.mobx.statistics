@@ -135,7 +135,7 @@ namespace MobX.Analysis
             FileSystem.Profile.SetDirty(guid);
             if (AutoSave)
             {
-                FileSystem.Profile.SaveDirty();
+                Save();
             }
             Updated.TryRaise(this);
 #if UNITY_EDITOR
@@ -151,11 +151,16 @@ namespace MobX.Analysis
 
         #region Saving
 
+        public void Save()
+        {
+            FileSystem.Profile.SaveFile(guid);
+        }
+
         public void OnQuit()
         {
-            if (AutoSave)
+            if (SaveOnQuit)
             {
-                FileSystem.Profile.SaveDirty();
+                Save();
             }
         }
 
@@ -186,8 +191,7 @@ namespace MobX.Analysis
         [Foldout("Serialization")]
         private void DebugSave()
         {
-            FileSystem.Profile.StoreFile(guid, _statData);
-            FileSystem.Profile.SaveDirty();
+            Save();
         }
 
         [Button]
@@ -204,7 +208,7 @@ namespace MobX.Analysis
         {
             _statData = new StatData<T>(guid, Name, Description, DefaultValue(), Type());
             FileSystem.Profile.StoreFile(guid, _statData);
-            FileSystem.Profile.SaveDirty();
+            FileSystem.Profile.SaveFile(guid);
         }
 
 #endif
