@@ -1,0 +1,156 @@
+﻿using JetBrains.Annotations;
+using MobX.Utilities.Inspector;
+using UnityEngine;
+using UnityEngine.Assertions;
+
+namespace MobX.Analysis
+{
+    public class StatAssetFloat : StatAsset<double>
+    {
+        #region Fields
+
+        [Foldout("Settings")]
+        [SerializeField] private Modification type;
+
+        [ConditionalShow(nameof(type), Modification.Increment)]
+        [SerializeField] private double increment = 1;
+        [ConditionalShow(nameof(type), Modification.Increment)]
+        [SerializeField] private double minIncrement = .1f;
+
+        [ConditionalShow(nameof(type), Modification.Minimal)]
+        [SerializeField] private double defaultMinimal = double.MaxValue;
+
+        #endregion
+
+
+        #region Overrides
+
+        protected override double DefaultValue()
+        {
+            return type == Modification.Minimal ? defaultMinimal : 0;
+        }
+
+        public override Modification Type()
+        {
+            return type;
+        }
+
+        public override string ValueString => Value.ToString("0.00");
+
+        #endregion
+
+
+        #region Public
+
+        [PublicAPI]
+        public UpdateResult<double> IncrementStat()
+        {
+            Assert.IsTrue(type == Modification.Increment);
+            var from = StatData.value;
+            var to = from + increment;
+            StatData.value = to;
+            SetStatDirty();
+            return new UpdateResult<double>(type, from, to, true);
+        }
+
+        [PublicAPI]
+        public UpdateResult<double> IncrementStat(double value)
+        {
+            Assert.IsTrue(type == Modification.Increment);
+            if (minIncrement > value)
+            {
+                return new UpdateResult<double>(type, StatData.value, StatData.value, false);
+            }
+            var from = StatData.value;
+            var to = from + value;
+            StatData.value = to;
+            SetStatDirty();
+            return new UpdateResult<double>(type, from, to, true);
+        }
+
+        [PublicAPI]
+        public UpdateResult<double> UpdateStat(double value)
+        {
+            Assert.IsTrue(type == Modification.Increment);
+            var from = StatData.value;
+            StatData.value = value;
+            SetStatDirty();
+            return new UpdateResult<double>(type, from, value, true);
+        }
+
+        [PublicAPI]
+        public UpdateResult<double> HighscoreStat(double value)
+        {
+            Assert.IsTrue(type == Modification.Highscore);
+            var current = StatData.value;
+            if (current < value)
+            {
+                StatData.value = value;
+                SetStatDirty();
+                return new UpdateResult<double>(type, current, value, true);
+            }
+            return new UpdateResult<double>(type, current, current, false);
+        }
+
+        [PublicAPI]
+        public UpdateResult<double> MinimalStat(double value)
+        {
+            Assert.IsTrue(type == Modification.Minimal);
+            var current = StatData.value;
+            if (current > value)
+            {
+                StatData.value = value;
+                SetStatDirty();
+                return new UpdateResult<double>(type, current, value, true);
+            }
+            return new UpdateResult<double>(type, current, current, false);
+        }
+
+        #endregion
+
+
+        #region Debug
+
+        [Button("Increment")]
+        [Foldout("Controls")]
+        [ConditionalShow(nameof(type), Modification.Increment)]
+        public void ButtonIncrementStat()
+        {
+            IncrementStat();
+        }
+
+        [Button("Increment")]
+        [Foldout("Controls")]
+        [ConditionalShow(nameof(type), Modification.Increment)]
+        public void ButtonIncrementStat(double value)
+        {
+            IncrementStat(value);
+        }
+
+        [Button("Update")]
+        [Foldout("Controls")]
+        [ConditionalShow(nameof(type), Modification.Update)]
+        public void ButtonUpdateStat(double value)
+        {
+            UpdateStat(value);
+        }
+
+        [Button("Update Highscore")]
+        [Foldout("Controls")]
+        [ConditionalShow(nameof(type), Modification.Highscore)]
+        public void ButtonHighscoreStat(double value)
+        {
+            HighscoreStat(value);
+        }
+
+        [Button("Update Minimal")]
+        [Foldout("Controls")]
+        [ConditionalShow(nameof(type), Modification.Minimal)]
+        public void ButtonMinimalStat(double value)
+        {
+            MinimalStat(value);
+        }
+
+        #endregion
+    }
+}

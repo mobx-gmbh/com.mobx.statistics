@@ -1,0 +1,18 @@
+{
+    "name": "mobx.analysis",
+    "rootNamespace": "MobX.Analysis",
+    "references": [
+        "GUID:451c7863c31cdec4fbc99d53f3082b53",
+        "GUID:60b317c0e9339ed42a02f571de4723cd",
+        "GUID:2b03cf6b0ac5d23419bed626562b55fb"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
