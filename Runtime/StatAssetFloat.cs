@@ -112,7 +112,7 @@ namespace MobX.Analysis
         #region Debug
 
         [Button("Increment")]
-        [Foldout("Controls")]
+        [Foldout("Debug")]
         [ConditionalShow(nameof(type), Modification.Increment)]
         public void ButtonIncrementStat()
         {
@@ -120,7 +120,7 @@ namespace MobX.Analysis
         }
 
         [Button("Increment")]
-        [Foldout("Controls")]
+        [Foldout("Debug")]
         [ConditionalShow(nameof(type), Modification.Increment)]
         public void ButtonIncrementStat(double value)
         {
@@ -128,7 +128,7 @@ namespace MobX.Analysis
         }
 
         [Button("Update")]
-        [Foldout("Controls")]
+        [Foldout("Debug")]
         [ConditionalShow(nameof(type), Modification.Update)]
         public void ButtonUpdateStat(double value)
         {
@@ -136,7 +136,7 @@ namespace MobX.Analysis
         }
 
         [Button("Update Highscore")]
-        [Foldout("Controls")]
+        [Foldout("Debug")]
         [ConditionalShow(nameof(type), Modification.Highscore)]
         public void ButtonHighscoreStat(double value)
         {
@@ -144,7 +144,7 @@ namespace MobX.Analysis
         }
 
         [Button("Update Minimal")]
-        [Foldout("Controls")]
+        [Foldout("Debug")]
         [ConditionalShow(nameof(type), Modification.Minimal)]
         public void ButtonMinimalStat(double value)
         {

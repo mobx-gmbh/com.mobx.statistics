@@ -15,11 +15,13 @@ namespace MobX.Analysis
         [SerializeField] private string displayName;
         [TextArea]
         [SerializeField] private string description;
+
         [SpaceBefore]
         [Tooltip("When enabled, the objects inspector is repainted when the stat is updated.")]
         [SerializeField] private bool repaint;
         [Tooltip("When enabled, the stat is saved every time it is updated.")]
         [SerializeField] private bool autoSave;
+        [SpaceAfter]
         [SerializeField] private bool saveOnQuit;
 
         [Foldout("Mediator", false)]
@@ -119,7 +121,7 @@ namespace MobX.Analysis
             _statData.name = Name;
             _statData.type = Type();
 
-            FileSystem.Profile.StoreFile(guid, _statData);
+            FileSystem.Profile.StoreFile(guid, _statData, new StoreOptions("Statistics", typeof(T).Name));
         }
 
         #endregion
@@ -185,31 +187,6 @@ namespace MobX.Analysis
         [Foldout("Debug")]
         [Label("Default")]
         private T DebugDefaultValue => DefaultValue();
-
-        [Button]
-        [DrawLine]
-        [Foldout("Serialization")]
-        private void DebugSave()
-        {
-            Save();
-        }
-
-        [Button]
-        [Foldout("Serialization")]
-        private void DebugDelete()
-        {
-            FileSystem.Profile.DeleteEntry(guid);
-        }
-
-        [Button("Reset")]
-        [DrawLineAfter]
-        [Foldout("Serialization")]
-        private void DebugResetStat()
-        {
-            _statData = new StatData<T>(guid, Name, Description, DefaultValue(), Type());
-            FileSystem.Profile.StoreFile(guid, _statData);
-            FileSystem.Profile.SaveFile(guid);
-        }
 
 #endif
 
