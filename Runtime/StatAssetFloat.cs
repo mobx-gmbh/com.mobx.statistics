@@ -111,6 +111,7 @@ namespace MobX.Analysis
 
         #region Debug
 
+#if UNITY_EDITOR
         [Button("Increment")]
         [Foldout("Debug")]
         [ConditionalShow(nameof(type), Modification.Increment)]
@@ -150,6 +151,7 @@ namespace MobX.Analysis
         {
             MinimalStat(value);
         }
+#endif
 
         #endregion
     }

@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using MobX.Mediator.Events;
+﻿using MobX.Mediator.Events;
 using MobX.Serialization;
 using MobX.Utilities.Callbacks;
 using MobX.Utilities.Inspector;
@@ -9,49 +8,12 @@ using UnityEngine;
 
 namespace MobX.Analysis
 {
-    public abstract class StatAsset : RuntimeAsset
-    {
-        [Foldout("Settings")]
-        [SerializeField] private string displayName;
-        [TextArea]
-        [SerializeField] private string description;
-
-        [SpaceBefore]
-        [Tooltip("When enabled, the objects inspector is repainted when the stat is updated.")]
-        [SerializeField] private bool repaint;
-        [Tooltip("When enabled, the stat is saved every time it is updated.")]
-        [SerializeField] private bool autoSave;
-        [SpaceAfter]
-        [SerializeField] private bool saveOnQuit;
-
-        [Foldout("Mediator", false)]
-        [SerializeField] private EventAsset<StatAsset> statUpdated;
-
-        [PublicAPI]
-        public string Name => displayName;
-
-        [PublicAPI]
-        public string Description => description;
-
-        [PublicAPI]
-        public abstract string ValueString { get; }
-
-        [PublicAPI]
-        public abstract Modification Type();
-
-        [PublicAPI]
-        public EventAsset<StatAsset> Updated => statUpdated;
-
-        protected bool AutoSave => autoSave;
-        protected bool SaveOnQuit => saveOnQuit;
-        protected new bool Repaint => repaint;
-    }
-
     public abstract class StatAsset<T> : StatAsset, IOnQuit
     {
         #region Fields & Properties
 
-        [HideInInspector] [SerializeField] private string guid;
+        [HideInInspector]
+        [SerializeField] private string guid;
         [NonSerialized] private StatData<T> _statData = StatData<T>.Empty;
 
         public event Action<T> Changed
@@ -114,14 +76,14 @@ namespace MobX.Analysis
 
         private void Initialize()
         {
-            FileSystem.Profile.TryGetFile(guid, out _statData);
-            _statData ??= new StatData<T>(guid, Name, Description, DefaultValue(), Type());
+            Profile.TryGetFile(DebugGuid, out _statData);
+            _statData ??= new StatData<T>(DebugGuid, Name, Description, DefaultValue(), Type());
 
             _statData.description = Description;
             _statData.name = Name;
             _statData.type = Type();
 
-            FileSystem.Profile.StoreFile(guid, _statData, new StoreOptions("Statistics", typeof(T).Name));
+            Profile.StoreFile(DebugGuid, _statData, new StoreOptions("Statistics", typeof(T).Name));
         }
 
         #endregion
@@ -134,7 +96,7 @@ namespace MobX.Analysis
         protected void SetStatDirty()
         {
             _changedBroadcast.Raise(Value);
-            FileSystem.Profile.SetDirty(guid);
+            Profile.SetDirty(DebugGuid);
             if (AutoSave)
             {
                 Save();
@@ -155,7 +117,7 @@ namespace MobX.Analysis
 
         public void Save()
         {
-            FileSystem.Profile.SaveFile(guid);
+            Profile.SaveFile(DebugGuid);
         }
 
         public void OnQuit()
@@ -176,7 +138,7 @@ namespace MobX.Analysis
         [Foldout("Debug")]
         [ReadonlyInspector]
         [Label("GUID")]
-        private string DebugGUID => guid;
+        private string DebugGuid => guid;
 
         [ReadonlyInspector]
         [Foldout("Debug")]
