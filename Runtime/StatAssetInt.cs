@@ -111,33 +111,33 @@ namespace MobX.Analysis
         [Button("Increment")]
         [Foldout("Debug")]
         [ConditionalShow(nameof(type), Modification.Increment)]
-        public void ButtonIncrementStat(ulong value)
+        public void ButtonIncrementStat(int value)
         {
-            IncrementStat(value);
+            IncrementStat((ulong) value);
         }
 
         [Button("Update")]
         [Foldout("Debug")]
         [ConditionalShow(nameof(type), Modification.Update)]
-        public void ButtonUpdateStat(ulong value)
+        public void ButtonUpdateStat(int value)
         {
-            UpdateStat(value);
+            UpdateStat((ulong) value);
         }
 
         [Button("Update Highscore")]
         [Foldout("Debug")]
         [ConditionalShow(nameof(type), Modification.Highscore)]
-        public void ButtonHighscoreStat(ulong value)
+        public void ButtonHighscoreStat(int value)
         {
-            HighscoreStat(value);
+            HighscoreStat((ulong) value);
         }
 
         [Button("Update Minimal")]
         [Foldout("Debug")]
         [ConditionalShow(nameof(type), Modification.Minimal)]
-        public void ButtonMinimalStat(ulong value)
+        public void ButtonMinimalStat(int value)
         {
-            MinimalStat(value);
+            MinimalStat((ulong) value);
         }
 #endif
 

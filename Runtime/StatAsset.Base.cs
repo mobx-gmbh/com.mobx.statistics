@@ -3,7 +3,9 @@ using MobX.Mediator.Events;
 using MobX.Serialization;
 using MobX.Utilities.Callbacks;
 using MobX.Utilities.Inspector;
+using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace MobX.Analysis
 {
@@ -15,10 +17,11 @@ namespace MobX.Analysis
         [SerializeField] private string displayName;
         [TextArea]
         [SerializeField] private string description;
-        [Tooltip("When enabled, the saved stat is not save slot specific. ")]
-        [SerializeField] private bool sharedStatistic;
 
+        [FormerlySerializedAs("elevation")]
         [SpaceBefore]
+        [Tooltip("Determines the level on which the stat is saved. Profile specific or shared.")]
+        [SerializeField] private StatStage stage = StatStage.Profile;
         [Tooltip("When enabled, the objects inspector is repainted when the stat is updated.")]
         [SerializeField] private bool repaint;
         [Tooltip("When enabled, the stat is saved every time it is updated.")]
@@ -57,7 +60,13 @@ namespace MobX.Analysis
         protected bool AutoSave => autoSave;
         protected bool SaveOnQuit => saveOnQuit;
         protected new bool Repaint => repaint;
-        protected IProfile Profile => sharedStatistic ? FileSystem.SharedProfile : FileSystem.Profile;
+        protected IProfile Profile =>
+            stage switch
+            {
+                StatStage.Profile => FileSystem.Profile,
+                StatStage.SharedProfile => FileSystem.SharedProfile,
+                var _ => throw new ArgumentOutOfRangeException()
+            };
 
         #endregion
     }
