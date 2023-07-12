@@ -23,7 +23,7 @@ namespace MobX.Analysis
         }
 
         [ReadonlyInspector]
-        public T Value => _statData.value;
+        public T Value => _statData != null ? _statData.value : default(T);
 
         protected StatData<T> StatData => _statData;
         private readonly Broadcast<T> _changedBroadcast = new();
@@ -40,6 +40,7 @@ namespace MobX.Analysis
             guid = UnityEditor.AssetDatabase.AssetPathToGUID(path);
 #endif
             FileSystem.InitializationCompleted += Initialize;
+            FileSystem.ShutdownCompleted += Shutdown;
             if (FileSystem.IsInitialized)
             {
                 Initialize();
@@ -72,18 +73,24 @@ namespace MobX.Analysis
         private void OnDisable()
         {
             FileSystem.InitializationCompleted -= Initialize;
+            FileSystem.InitializationCompleted -= Shutdown;
         }
 
         private void Initialize()
         {
-            Profile.TryGetFile(DebugGuid, out _statData);
-            _statData ??= new StatData<T>(DebugGuid, Name, Description, DefaultValue(), Type());
+            Profile.TryGetFile(guid, out _statData);
+            _statData ??= new StatData<T>(guid, Name, Description, DefaultValue(), Type());
 
             _statData.description = Description;
             _statData.name = Name;
             _statData.type = Type();
 
-            Profile.StoreFile(DebugGuid, _statData, new StoreOptions("Statistics", typeof(T).Name));
+            Profile.StoreFile(guid, _statData, new StoreOptions("Statistics", typeof(T).Name));
+        }
+
+        private void Shutdown()
+        {
+            _statData = null;
         }
 
         #endregion
@@ -96,7 +103,7 @@ namespace MobX.Analysis
         protected void SetStatDirty()
         {
             _changedBroadcast.Raise(Value);
-            Profile.SetDirty(DebugGuid);
+            Profile.SetDirty(guid);
             if (AutoSave)
             {
                 Save();
@@ -117,7 +124,7 @@ namespace MobX.Analysis
 
         public void Save()
         {
-            Profile.SaveFile(DebugGuid);
+            Profile.SaveFile(guid);
         }
 
         public void OnQuit()
