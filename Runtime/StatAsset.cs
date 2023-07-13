@@ -1,6 +1,5 @@
 ﻿using MobX.Mediator.Events;
 using MobX.Serialization;
-using MobX.Utilities;
 using MobX.Utilities.Callbacks;
 using MobX.Utilities.Inspector;
 using System;
@@ -24,6 +23,7 @@ namespace MobX.Analysis
         }
 
         [ReadonlyInspector]
+        [Foldout("Debug")]
         public T Value => _statData != null ? _statData.value : default(T);
 
         protected StatData<T> StatData => _statData;

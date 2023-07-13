@@ -4,7 +4,7 @@ using UnityEngine.Assertions;
 
 namespace MobX.Analysis
 {
-    public class StatAssetInt : StatAsset<ulong>
+    public class IntegerStat : StatAsset<ulong>
     {
         #region Fields
 

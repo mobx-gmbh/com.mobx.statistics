@@ -1,6 +1,6 @@
 ﻿namespace MobX.Analysis
 {
-    public class StatAssetString : StatAsset<string>
+    public class StringStat : StatAsset<string>
     {
         protected override string DefaultValue()
         {

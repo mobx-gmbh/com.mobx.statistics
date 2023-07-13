@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 
 namespace MobX.Analysis
 {
-    public class StatAssetFloat : StatAsset<double>
+    public class FloatStat : StatAsset<double>
     {
         #region Fields
 
