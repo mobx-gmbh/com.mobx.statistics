@@ -1,11 +1,10 @@
-﻿using JetBrains.Annotations;
-using MobX.Utilities.Inspector;
+﻿using MobX.Utilities.Inspector;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace MobX.Analysis
 {
-    public class FloatStat : StatAsset<double>
+    public class StatAssetInt : StatAsset<ulong>
     {
         #region Fields
 
@@ -13,19 +12,17 @@ namespace MobX.Analysis
         [SerializeField] private Modification type;
 
         [ConditionalShow(nameof(type), Modification.Increment)]
-        [SerializeField] private double increment = 1;
-        [ConditionalShow(nameof(type), Modification.Increment)]
-        [SerializeField] private double minIncrement = .1f;
+        [SerializeField] [Min(1)] private ulong increment = 1;
 
         [ConditionalShow(nameof(type), Modification.Minimal)]
-        [SerializeField] private double defaultMinimal = double.MaxValue;
+        [SerializeField] private ulong defaultMinimal = ulong.MaxValue;
 
         #endregion
 
 
         #region Overrides
 
-        protected override double DefaultValue()
+        protected override ulong DefaultValue()
         {
             return type == Modification.Minimal ? defaultMinimal : 0;
         }
@@ -35,51 +32,43 @@ namespace MobX.Analysis
             return type;
         }
 
-        public override string ValueString => Value.ToString("0.00");
+        public override string ValueString => Value.ToString();
 
         #endregion
 
 
         #region Public
 
-        [PublicAPI]
-        public UpdateResult<double> IncrementStat()
+        public UpdateResult<ulong> IncrementStat()
         {
             Assert.IsTrue(type == Modification.Increment);
             var from = StatData.value;
             var to = from + increment;
             StatData.value = to;
             SetStatDirty();
-            return new UpdateResult<double>(type, from, to, true);
+            return new UpdateResult<ulong>(type, from, to, true);
         }
 
-        [PublicAPI]
-        public UpdateResult<double> IncrementStat(double value)
+        public UpdateResult<ulong> IncrementStat(ulong value)
         {
             Assert.IsTrue(type == Modification.Increment);
-            if (minIncrement > value)
-            {
-                return new UpdateResult<double>(type, StatData.value, StatData.value, false);
-            }
             var from = StatData.value;
             var to = from + value;
             StatData.value = to;
             SetStatDirty();
-            return new UpdateResult<double>(type, from, to, true);
+            return new UpdateResult<ulong>(type, from, to, true);
         }
 
-        [PublicAPI]
-        public UpdateResult<double> UpdateStat(double value)
+        public UpdateResult<ulong> UpdateStat(ulong value)
         {
             Assert.IsTrue(type == Modification.Increment);
             var from = StatData.value;
             StatData.value = value;
             SetStatDirty();
-            return new UpdateResult<double>(type, from, value, true);
+            return new UpdateResult<ulong>(type, from, value, true);
         }
 
-        [PublicAPI]
-        public UpdateResult<double> HighscoreStat(double value)
+        public UpdateResult<ulong> HighscoreStat(ulong value)
         {
             Assert.IsTrue(type == Modification.Highscore);
             var current = StatData.value;
@@ -87,13 +76,12 @@ namespace MobX.Analysis
             {
                 StatData.value = value;
                 SetStatDirty();
-                return new UpdateResult<double>(type, current, value, true);
+                return new UpdateResult<ulong>(type, current, value, true);
             }
-            return new UpdateResult<double>(type, current, current, false);
+            return new UpdateResult<ulong>(type, current, current, false);
         }
 
-        [PublicAPI]
-        public UpdateResult<double> MinimalStat(double value)
+        public UpdateResult<ulong> MinimalStat(ulong value)
         {
             Assert.IsTrue(type == Modification.Minimal);
             var current = StatData.value;
@@ -101,9 +89,9 @@ namespace MobX.Analysis
             {
                 StatData.value = value;
                 SetStatDirty();
-                return new UpdateResult<double>(type, current, value, true);
+                return new UpdateResult<ulong>(type, current, value, true);
             }
-            return new UpdateResult<double>(type, current, current, false);
+            return new UpdateResult<ulong>(type, current, current, false);
         }
 
         #endregion
@@ -123,7 +111,7 @@ namespace MobX.Analysis
         [Button("Increment")]
         [Foldout("Debug")]
         [ConditionalShow(nameof(type), Modification.Increment)]
-        public void ButtonIncrementStat(double value)
+        public void ButtonIncrementStat(ulong value)
         {
             IncrementStat(value);
         }
@@ -131,7 +119,7 @@ namespace MobX.Analysis
         [Button("Update")]
         [Foldout("Debug")]
         [ConditionalShow(nameof(type), Modification.Update)]
-        public void ButtonUpdateStat(double value)
+        public void ButtonUpdateStat(ulong value)
         {
             UpdateStat(value);
         }
@@ -139,7 +127,7 @@ namespace MobX.Analysis
         [Button("Update Highscore")]
         [Foldout("Debug")]
         [ConditionalShow(nameof(type), Modification.Highscore)]
-        public void ButtonHighscoreStat(double value)
+        public void ButtonHighscoreStat(ulong value)
         {
             HighscoreStat(value);
         }
@@ -147,7 +135,7 @@ namespace MobX.Analysis
         [Button("Update Minimal")]
         [Foldout("Debug")]
         [ConditionalShow(nameof(type), Modification.Minimal)]
-        public void ButtonMinimalStat(double value)
+        public void ButtonMinimalStat(ulong value)
         {
             MinimalStat(value);
         }
