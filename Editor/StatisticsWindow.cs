@@ -24,6 +24,7 @@ namespace MobX.Analysis.Editor
         private bool _isMouseEvent;
         private string _filter;
         private StatAsset _selected;
+        private int _updateCount;
 
 
         #region Setup
@@ -47,11 +48,16 @@ namespace MobX.Analysis.Editor
             _reorderableList = new ReorderableList(_filteredList, typeof(StatAsset), true, false, false, false);
             _reorderableList.drawElementCallback += DrawStat;
             _reorderableList.onSelectCallback += OnSelect;
+            UnityEditor.EditorApplication.update -= OnUpdate;
+            UnityEditor.EditorApplication.update += OnUpdate;
 
             foreach (var statAsset in _stats)
             {
-                statAsset.Updated.Remove(OnStatUpdated);
-                statAsset.Updated.Add(OnStatUpdated);
+                if (statAsset && statAsset.Updated)
+                {
+                    statAsset.Updated.Remove(OnStatUpdated);
+                    statAsset.Updated.Add(OnStatUpdated);
+                }
             }
         }
 
@@ -59,6 +65,7 @@ namespace MobX.Analysis.Editor
         {
             _stats.Clear();
             _filteredList.Clear();
+            UnityEditor.EditorApplication.update -= OnUpdate;
             foreach (var statAsset in _stats)
             {
                 statAsset.Updated.Remove(OnStatUpdated);
@@ -67,6 +74,21 @@ namespace MobX.Analysis.Editor
 
         private void OnStatUpdated(StatAsset asset)
         {
+            Repaint();
+        }
+
+        #endregion
+
+
+        #region Update
+
+        private void OnUpdate()
+        {
+            if (++_updateCount <= 5)
+            {
+                return;
+            }
+            _updateCount = 0;
             Repaint();
         }
 
