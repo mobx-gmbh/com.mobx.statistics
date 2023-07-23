@@ -23,6 +23,7 @@ namespace MobX.Analysis
         }
 
         [ReadonlyInspector]
+        [Foldout("Debug")]
         public T Value => _statData != null ? _statData.value : default(T);
 
         protected StatData<T> StatData => _statData;
@@ -33,8 +34,9 @@ namespace MobX.Analysis
 
         #region Setup
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
 #if UNITY_EDITOR
             var path = UnityEditor.AssetDatabase.GetAssetPath(this);
             guid = UnityEditor.AssetDatabase.AssetPathToGUID(path);
@@ -70,8 +72,9 @@ namespace MobX.Analysis
 #endif
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             FileSystem.InitializationCompleted -= Initialize;
             FileSystem.InitializationCompleted -= Shutdown;
         }
@@ -122,6 +125,8 @@ namespace MobX.Analysis
 
         #region Saving
 
+        [Foldout("Debug")]
+        [Button]
         public void Save()
         {
             Profile.SaveFile(guid);
