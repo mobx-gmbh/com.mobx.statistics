@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using MobX.Mediator.Events;
 using MobX.Serialization;
+using MobX.Serialization.Mediator;
 using MobX.Utilities.Callbacks;
 using MobX.Utilities.Inspector;
 using System;
@@ -21,7 +22,7 @@ namespace MobX.Analysis
         [FormerlySerializedAs("elevation")]
         [SpaceBefore]
         [Tooltip("Determines the level on which the stat is saved. Profile specific or shared.")]
-        [SerializeField] private StatStage stage = StatStage.Profile;
+        [SerializeField] private StorageLevel stage = StorageLevel.Profile;
         [Tooltip("When enabled, the objects inspector is repainted when the stat is updated.")]
         [SerializeField] private bool repaint;
         [Tooltip("When enabled, the stat is saved every time it is updated.")]
@@ -63,8 +64,8 @@ namespace MobX.Analysis
         protected IProfile Profile =>
             stage switch
             {
-                StatStage.Profile => FileSystem.Profile,
-                StatStage.SharedProfile => FileSystem.SharedProfile,
+                StorageLevel.Profile => FileSystem.Profile,
+                StorageLevel.Shared => FileSystem.SharedProfile,
                 var _ => throw new ArgumentOutOfRangeException()
             };
 
