@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-namespace MobX.Analysis
+namespace MobX.Statistics
 {
     public abstract class StatAsset<T> : StatAsset, IOnQuit
     {

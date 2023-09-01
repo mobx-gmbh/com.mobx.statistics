@@ -1,4 +1,4 @@
-﻿namespace MobX.Analysis
+﻿namespace MobX.Statistics
 {
     public enum Modification
     {

@@ -1,6 +1,6 @@
 ﻿using MobX.Mediator.Collections;
 
-namespace MobX.Analysis
+namespace MobX.Statistics
 {
     public class IntegerStatList : ListAsset<IntegerStat>
     {

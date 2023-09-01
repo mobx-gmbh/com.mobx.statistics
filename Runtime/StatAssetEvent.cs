@@ -1,6 +1,6 @@
 ﻿using MobX.Mediator.Events;
 
-namespace MobX.Analysis
+namespace MobX.Statistics
 {
     public class StatAssetEvent : EventAsset<StatAsset>
     {

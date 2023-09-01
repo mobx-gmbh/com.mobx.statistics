@@ -3,7 +3,7 @@ using MobX.Utilities.Inspector;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace MobX.Analysis
+namespace MobX.Statistics
 {
     public class FloatStat : StatAsset<double>
     {

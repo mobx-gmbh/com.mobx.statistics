@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace MobX.Analysis
+namespace MobX.Statistics
 {
     public class IntegerStat : StatAsset<ulong>
     {

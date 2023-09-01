@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MobX.Analysis
+namespace MobX.Statistics
 {
     [Serializable]
     public class StatData

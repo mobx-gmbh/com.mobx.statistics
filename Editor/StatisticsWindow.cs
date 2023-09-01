@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace MobX.Analysis.Editor
+namespace MobX.Statistics.Editor
 {
     public class StatisticsWindow : UnityEditor.EditorWindow
     {

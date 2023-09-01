@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace MobX.Analysis
+namespace MobX.Statistics
 {
     public readonly ref struct UpdateResult<T>
     {

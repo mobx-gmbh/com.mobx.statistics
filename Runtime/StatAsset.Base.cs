@@ -8,7 +8,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace MobX.Analysis
+namespace MobX.Statistics
 {
     public abstract class StatAsset : RuntimeAsset
     {
