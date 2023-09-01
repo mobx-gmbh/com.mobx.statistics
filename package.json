@@ -1,12 +1,12 @@
 {
-  "name": "com.mobx.analysis",
+  "name": "com.mobx.statistics",
   "version": "1.0.0",
-  "displayName": "Analyisis",
+  "displayName": "Statistics",
   "description": "Persistent gameplay statistics and analysis framework.",
-  "unity": "2022.2",
-  "documentationUrl": "https://github.com/mobx-gmbh/com.mobx.analysis",
-  "changelogUrl": "https://github.com/mobx-gmbh/com.mobx.analysis/blob/main/CHANGELOG.md",
-  "licensesUrl": "https://github.com/mobx-gmbh/com.mobx.analysis/blob/main/LICENSE.md",
+  "unity": "2022.3",
+  "documentationUrl": "https://github.com/mobx-gmbh/com.mobx.statistics",
+  "changelogUrl": "https://github.com/mobx-gmbh/com.mobx.statistics/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/mobx-gmbh/com.mobx.statistics/blob/main/LICENSE.md",
   "keywords": [
     "statistics",
     "analysis"
@@ -16,5 +16,10 @@
     "email": "jonathan@mobx.app",
     "url": "https://github.com/mobx-gmbh"
   },
-  "type": "tool"
+  "type": "tool",
+  "dependencies": {
+    "com.mobx.serialization": "1.0.0",
+    "com.mobx.utilities": "1.0.0",
+    "com.mobx.mediator": "1.0.0"
+  }
 }

@@ -1,6 +1,6 @@
 {
-    "name": "mobx.analysis",
-    "rootNamespace": "MobX.Analysis",
+    "name": "mobx.statistics",
+    "rootNamespace": "MobX.Statistics",
     "references": [
         "GUID:451c7863c31cdec4fbc99d53f3082b53",
         "GUID:60b317c0e9339ed42a02f571de4723cd",
