@@ -10,7 +10,7 @@ using UnityEngine.Serialization;
 
 namespace MobX.Statistics
 {
-    public abstract class StatAsset : RuntimeAsset
+    public abstract class StatAsset : ScriptableAsset
     {
         #region Fields
 
