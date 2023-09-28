@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MobX.Statistics
 {
-    public abstract class StatAsset<T> : StatAsset, IOnQuit
+    public abstract class StatAsset<T> : StatAsset
     {
         #region Fields & Properties
 
@@ -96,6 +96,15 @@ namespace MobX.Statistics
             _statData = null;
         }
 
+        [CallbackOnApplicationQuit]
+        private void OnQuit()
+        {
+            if (SaveOnQuit)
+            {
+                Save();
+            }
+        }
+
         #endregion
 
 
@@ -130,14 +139,6 @@ namespace MobX.Statistics
         public void Save()
         {
             Profile.SaveFile(guid);
-        }
-
-        public void OnQuit()
-        {
-            if (SaveOnQuit)
-            {
-                Save();
-            }
         }
 
         #endregion
