@@ -1,8 +1,8 @@
 ﻿using JetBrains.Annotations;
+using MobX.Mediator.Callbacks;
+using MobX.Mediator.Deprecated;
 using MobX.Mediator.Events;
 using MobX.Serialization;
-using MobX.Serialization.Mediator;
-using MobX.Utilities.Callbacks;
 using MobX.Utilities.Inspector;
 using System;
 using UnityEngine;

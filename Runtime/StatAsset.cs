@@ -1,6 +1,6 @@
-﻿using MobX.Mediator.Events;
+﻿using MobX.Mediator.Callbacks;
+using MobX.Mediator.Events;
 using MobX.Serialization;
-using MobX.Utilities.Callbacks;
 using MobX.Utilities.Inspector;
 using System;
 using System.Linq;
