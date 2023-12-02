@@ -1,7 +1,8 @@
-﻿using MobX.Mediator.Callbacks;
+﻿using MobX.Inspector;
+using MobX.Mediator.Callbacks;
 using MobX.Mediator.Events;
 using MobX.Serialization;
-using MobX.Utilities.Inspector;
+using Sirenix.OdinInspector;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace MobX.Statistics
     {
         #region Fields & Properties
 
-        [HideInInspector]
+        [ReadOnly]
         [SerializeField] private string guid;
         [NonSerialized] private StatData<T> _statData = StatData<T>.Empty;
 
@@ -22,8 +23,9 @@ namespace MobX.Statistics
             remove => _changedBroadcast.Remove(value);
         }
 
-        [ReadonlyInspector]
-        [Foldout("Debug")]
+        [ReadOnly]
+        [ShowInInspector]
+        [Foldout("Settings")]
         public T Value => _statData != null ? _statData.value : default(T);
 
         protected StatData<T> StatData => _statData;
@@ -120,7 +122,7 @@ namespace MobX.Statistics
             {
                 Save();
             }
-            Updated.TryRaise(this);
+            Updated.Raise(this);
 #if UNITY_EDITOR
             if (Repaint && UnityEditor.Selection.objects.Contains(this))
             {
@@ -134,36 +136,12 @@ namespace MobX.Statistics
 
         #region Saving
 
-        [Foldout("Debug")]
         [Button]
+        [Foldout("Debug")]
         public void Save()
         {
             Profile.SaveFile(guid);
         }
-
-        #endregion
-
-
-        #region Debug
-
-#if UNITY_EDITOR
-
-        [Foldout("Debug")]
-        [ReadonlyInspector]
-        [Label("GUID")]
-        private string DebugGuid => guid;
-
-        [ReadonlyInspector]
-        [Foldout("Debug")]
-        [Label("Type")]
-        private Modification DebugModification => Type();
-
-        [ReadonlyInspector]
-        [Foldout("Debug")]
-        [Label("Default")]
-        private T DebugDefaultValue => DefaultValue();
-
-#endif
 
         #endregion
     }

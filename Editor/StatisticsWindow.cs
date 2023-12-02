@@ -5,12 +5,13 @@ using System;
 using System.Collections.Generic;
 using UnityEditorInternal;
 using UnityEngine;
+using GUIUtility = MobX.Utilities.Editor.Helper.GUIUtility;
 
 namespace MobX.Statistics.Editor
 {
     public class StatisticsWindow : UnityEditor.EditorWindow
     {
-        [UnityEditor.MenuItem("Tools/Statistics", priority = 100)]
+        [UnityEditor.MenuItem("MobX/Statistics", priority = 100)]
         public static void OpenWindow()
         {
             var window = GetWindow<StatisticsWindow>("Statistics");
@@ -51,14 +52,8 @@ namespace MobX.Statistics.Editor
             UnityEditor.EditorApplication.update -= OnUpdate;
             UnityEditor.EditorApplication.update += OnUpdate;
 
-            foreach (var statAsset in _stats)
-            {
-                if (statAsset && statAsset.Updated)
-                {
-                    statAsset.Updated.Remove(OnStatUpdated);
-                    statAsset.Updated.Add(OnStatUpdated);
-                }
-            }
+            StatAsset.Updated.Remove(OnStatUpdated);
+            StatAsset.Updated.Add(OnStatUpdated);
         }
 
         private void Shutdown()
@@ -66,10 +61,7 @@ namespace MobX.Statistics.Editor
             _stats.Clear();
             _filteredList.Clear();
             UnityEditor.EditorApplication.update -= OnUpdate;
-            foreach (var statAsset in _stats)
-            {
-                statAsset.Updated.Remove(OnStatUpdated);
-            }
+            StatAsset.Updated.Remove(OnStatUpdated);
         }
 
         private void OnStatUpdated(StatAsset asset)
@@ -101,13 +93,13 @@ namespace MobX.Statistics.Editor
         {
             _isMouseEvent = Event.current.isMouse;
             UnityEditor.EditorGUILayout.BeginHorizontal();
-            _filter = GUIHelper.SearchBar(_filter);
+            _filter = GUIUtility.SearchBar(_filter);
             if (GUILayout.Button("Refresh", GUILayout.Width(80)))
             {
                 Initialize();
             }
             UnityEditor.EditorGUILayout.EndHorizontal();
-            GUIHelper.DrawLine();
+            GUIUtility.DrawLine();
             ApplyFilter();
             DrawHeader();
             _scrollPosition = UnityEditor.EditorGUILayout.BeginScrollView(_scrollPosition);
@@ -117,35 +109,35 @@ namespace MobX.Statistics.Editor
 
         private void DrawHeader()
         {
-            var rect = GUIHelper.GetControlRect();
+            var rect = GUIUtility.GetControlRect();
             const float ColumnWidth = 200f;
 
-            UnityEditor.EditorGUI.LabelField(rect, "Stat", GUIHelper.BoldLabelStyle);
+            UnityEditor.EditorGUI.LabelField(rect, "Stat", GUIUtility.BoldLabelStyle);
 
             var rectOffset = ColumnWidth;
 
             var valueRect = new Rect(rect.x + rectOffset, rect.y, rect.width - rectOffset, rect.height);
-            UnityEditor.EditorGUI.LabelField(valueRect, "Value", GUIHelper.BoldLabelStyle);
+            UnityEditor.EditorGUI.LabelField(valueRect, "Value", GUIUtility.BoldLabelStyle);
             rectOffset += ColumnWidth;
 
             var typeRect = new Rect(rect.x + rectOffset, rect.y, rect.width - rectOffset, rect.height);
-            UnityEditor.EditorGUI.LabelField(typeRect, "Type", GUIHelper.BoldLabelStyle);
+            UnityEditor.EditorGUI.LabelField(typeRect, "Type", GUIUtility.BoldLabelStyle);
             rectOffset += ColumnWidth;
 
             var descriptionRect = new Rect(rect.x + rectOffset, rect.y, rect.width - rectOffset, rect.height);
-            UnityEditor.EditorGUI.LabelField(descriptionRect, "Description", GUIHelper.BoldLabelStyle);
+            UnityEditor.EditorGUI.LabelField(descriptionRect, "Description", GUIUtility.BoldLabelStyle);
         }
 
         private void DrawStat(Rect rect, int index, bool isActive, bool isFocused)
         {
             var stat = (StatAsset) _reorderableList.list[index];
             const float ColumnWidth = 200f;
-            var lineRect = new Rect(0, rect.y, GUIHelper.GetViewWidth(), 1);
+            var lineRect = new Rect(0, rect.y, GUIUtility.GetViewWidth(), 1);
             UnityEditor.EditorGUI.DrawRect(lineRect, new Color(0f, 0f, 0f, 0.2f));
 
             if (index.IsEven())
             {
-                var backgroundRect = new Rect(0, rect.y, GUIHelper.GetViewWidth(), rect.height);
+                var backgroundRect = new Rect(0, rect.y, GUIUtility.GetViewWidth(), rect.height);
                 UnityEditor.EditorGUI.DrawRect(backgroundRect, new Color(0f, 0f, 0f, 0.06f));
             }
 
@@ -214,7 +206,7 @@ namespace MobX.Statistics.Editor
                 return;
             }
 
-            if (_isMouseEvent && GUIHelper.IsDoubleClick(_selected))
+            if (_isMouseEvent && GUIUtility.IsDoubleClick(_selected))
             {
                 EditorHelper.SelectObject(_selected);
             }

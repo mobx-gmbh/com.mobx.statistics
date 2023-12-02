@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
-using MobX.Utilities.Inspector;
+using MobX.Inspector;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -10,14 +11,15 @@ namespace MobX.Statistics
         #region Fields
 
         [Foldout("Settings")]
+        [Title("Stat")]
         [SerializeField] private Modification type;
 
-        [ConditionalShow(nameof(type), Modification.Increment)]
+        [ShowIf(nameof(type), Modification.Increment)]
         [SerializeField] private double increment = 1;
-        [ConditionalShow(nameof(type), Modification.Increment)]
+        [ShowIf(nameof(type), Modification.Increment)]
         [SerializeField] private double minIncrement = .1f;
 
-        [ConditionalShow(nameof(type), Modification.Minimal)]
+        [ShowIf(nameof(type), Modification.Minimal)]
         [SerializeField] private double defaultMinimal = double.MaxValue;
 
         #endregion
@@ -114,7 +116,7 @@ namespace MobX.Statistics
 #if UNITY_EDITOR
         [Button("Increment")]
         [Foldout("Debug")]
-        [ConditionalShow(nameof(type), Modification.Increment)]
+        [ShowIf(nameof(type), Modification.Increment)]
         public void ButtonIncrementStat()
         {
             IncrementStat();
@@ -122,7 +124,7 @@ namespace MobX.Statistics
 
         [Button("Increment")]
         [Foldout("Debug")]
-        [ConditionalShow(nameof(type), Modification.Increment)]
+        [ShowIf(nameof(type), Modification.Increment)]
         public void ButtonIncrementStat(double value)
         {
             IncrementStat(value);
@@ -130,7 +132,7 @@ namespace MobX.Statistics
 
         [Button("Update")]
         [Foldout("Debug")]
-        [ConditionalShow(nameof(type), Modification.Update)]
+        [ShowIf(nameof(type), Modification.Update)]
         public void ButtonUpdateStat(double value)
         {
             UpdateStat(value);
@@ -138,7 +140,7 @@ namespace MobX.Statistics
 
         [Button("Update Highscore")]
         [Foldout("Debug")]
-        [ConditionalShow(nameof(type), Modification.Highscore)]
+        [ShowIf(nameof(type), Modification.Highscore)]
         public void ButtonHighscoreStat(double value)
         {
             HighscoreStat(value);
@@ -146,7 +148,7 @@ namespace MobX.Statistics
 
         [Button("Update Minimal")]
         [Foldout("Debug")]
-        [ConditionalShow(nameof(type), Modification.Minimal)]
+        [ShowIf(nameof(type), Modification.Minimal)]
         public void ButtonMinimalStat(double value)
         {
             MinimalStat(value);
