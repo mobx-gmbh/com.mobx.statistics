@@ -83,7 +83,7 @@ namespace MobX.Statistics
 
         private void Initialize()
         {
-            Profile.TryGetFile(guid, out _statData);
+            Profile.TryLoadFile(guid, out _statData);
             _statData ??= new StatData<T>(guid, Name, Description, DefaultValue(), Type());
 
             _statData.description = Description;
@@ -117,7 +117,7 @@ namespace MobX.Statistics
         protected void SetStatDirty()
         {
             _changedBroadcast.Raise(Value);
-            Profile.SetDirty(guid);
+            Profile.StoreFile(guid, _statData);
             if (AutoSave)
             {
                 Save();
@@ -140,7 +140,7 @@ namespace MobX.Statistics
         [Foldout("Debug")]
         public void Save()
         {
-            Profile.SaveFile(guid);
+            Profile.SaveFile(guid, _statData);
         }
 
         #endregion

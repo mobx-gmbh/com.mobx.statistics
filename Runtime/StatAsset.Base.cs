@@ -1,8 +1,8 @@
 ﻿using JetBrains.Annotations;
 using MobX.Inspector;
 using MobX.Mediator.Callbacks;
-using MobX.Mediator.Deprecated;
 using MobX.Mediator.Events;
+using MobX.Mediator.Values;
 using MobX.Serialization;
 using Sirenix.OdinInspector;
 using System;
@@ -60,7 +60,7 @@ namespace MobX.Statistics
         protected bool SaveOnQuit => saveOnQuit;
         protected new bool Repaint => repaint;
 
-        protected IProfile Profile =>
+        protected ISaveProfile Profile =>
             stage switch
             {
                 StorageLevel.Profile => FileSystem.Profile,
